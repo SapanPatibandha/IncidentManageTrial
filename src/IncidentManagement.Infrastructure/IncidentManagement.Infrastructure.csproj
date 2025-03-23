@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IncidentManagement.Domain\IncidentManagement.Domain.csproj" />
+    <ProjectReference Include="..\IncidentManagement.Application\IncidentManagement.Application.csproj" />
   </ItemGroup>
 
 </Project>

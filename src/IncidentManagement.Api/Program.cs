@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-// Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
+using IncidentManagement.Infrastructure;
 
 public partial class Program
 {
@@ -16,11 +16,23 @@ public partial class Program
         builder.Services.AddDbContext<IncidentDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+        //         builder.Services.AddScoped<IIncidentService, IncidentService>();
+        DependencyInjection.AddInfrastructureServices(builder.Services);
+
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+
+        // Apply migrations and seed data
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            var context = services.GetRequiredService<IncidentDbContext>();
+            context.Database.Migrate();
+        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

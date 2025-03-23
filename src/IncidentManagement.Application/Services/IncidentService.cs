@@ -38,7 +38,10 @@ namespace IncidentManagement.Application.Services
                 Name = incidentDto.Name,
                 Description = incidentDto.Description,
                 Status = incidentDto.Status,
-                CreatedDate = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow,
+                CreatedBy = "System",
+                ModifiedDate = DateTime.UtcNow,
+                ModifiedBy = "System"
             };
             await _incidentRepository.AddAsync(incident);
             return new IncidentDto
